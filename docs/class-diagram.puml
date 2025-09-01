@@ -29,7 +29,7 @@ package "ACME.OOP.Procurement" {
     +ProductId: ProductId {readonly}
     +Quantity: int {readonly}
     +UnitPrice: Money {readonly}
-    +CalculateSubtotal(): Money
+    +CalculateItemTotal(): Money
   }
 
   class "ProductId" as ProductId {
