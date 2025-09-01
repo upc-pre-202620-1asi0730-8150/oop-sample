@@ -27,7 +27,7 @@ The design follows DDD principles with aggregates and value objects. Key feature
 ## Class Diagram
 The following class diagram illustrates the structure of the application, including the main classes and their relationships.
 
-![class-diagram](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/upc-pre-202520-1asi0730-sandbox/oop-sample/refs/heads/master/docs/class-diagram.puml?token=GHSAT0AAAAAADJGFNEZ2GRE6LJD5PUDY34I2FNWFYA)
+![class-diagram](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/upc-pre-202520-1asi0730-sandbox/oop-sample/refs/heads/master/docs/class-diagram.puml?token=GHSAT0AAAAAADJGFNEY7HVSHSTV7PCH6XAK2FVAJNA)
 
 See [docs/class-diagram.puml](docs/class-diagram.puml) for the PlantUML source.
 
