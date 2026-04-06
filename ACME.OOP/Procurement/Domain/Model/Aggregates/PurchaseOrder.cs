@@ -5,7 +5,7 @@ using ACME.OOP.Shared.Domain.Model.ValueObjects;
 namespace ACME.OOP.Procurement.Domain.Model.Aggregates;
 
 /// <summary>
-/// Represents a purchase order aggregate in the Procurement bounded context. 
+/// Represents a purchase order aggregate in the 'Procurement' bounded context. 
 /// </summary>
 /// <param name="orderNumber">The order number, which must be a non-null, non-empty string.</param>
 /// <param name="supplierId">The supplier identifier, which must be a non-null <see cref="SupplierId"/> object.</param>

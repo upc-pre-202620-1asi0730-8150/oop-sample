@@ -4,12 +4,12 @@ using ACME.OOP.Shared.Domain.Model.ValueObjects;
 namespace ACME.OOP.Procurement.Domain.Model.Aggregates;
 
 /// <summary>
-/// Represents a purchase order item aggregate in the Procurement bounded context. 
+/// Represents a purchase order item aggregate in the 'Procurement' bounded context. 
 /// </summary>
 public class PurchaseOrderItem
 {
     /// <summary>
-    /// Represents a purchase order item aggregate in the Procurement bounded context. 
+    /// Represents a purchase order item aggregate in the 'Procurement' bounded context. 
     /// </summary>
     /// <param name="productId">The product identifier, which must be a non-null <see cref="ProductId"/> object.</param>
     /// <param name="quantity">The quantity of the product, which must be greater than zero.</param>
