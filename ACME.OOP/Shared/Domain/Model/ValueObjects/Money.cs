@@ -58,7 +58,7 @@ public readonly record struct Money
     /// </summary>
     /// <param name="factor">The factor to multiply the monetary value by.</param>
     /// <returns>A new <see cref="Money"/> object representing the result of the multiplication.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown when factor is negative.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the factor is negative.</exception>
     public Money Multiply(decimal factor)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(factor);
