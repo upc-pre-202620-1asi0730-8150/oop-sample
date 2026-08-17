@@ -3,7 +3,7 @@ namespace ACME.OOP.Shared.Domain.Model.ValueObjects;
 /// <summary>
 /// Represents a monetary value object. 
 /// </summary>
-public record Money
+public readonly record struct Money
 {
     public decimal Amount { get; init; }
     public string Currency { get; init; }
@@ -13,14 +13,19 @@ public record Money
     /// </summary>
     /// <param name="amount">The monetary amount.</param>
     /// <param name="currency">The currency.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the amount is negative.</exception>
     /// <exception cref="ArgumentException">Thrown when the currency is not a valid 3-letter ISO code.</exception>
     public Money(decimal amount, string currency)
     {
-        if (string.IsNullOrWhiteSpace(currency) || currency.Length  != 3)
+        ArgumentOutOfRangeException.ThrowIfNegative(amount);
+        ArgumentException.ThrowIfNullOrWhiteSpace(currency);
+        if (currency.Length != 3)
             throw new ArgumentException("Currency must be a valid 3-letter ISO code.", nameof(currency));
+
         Amount = amount;
-        Currency = currency;
+        Currency = currency.ToUpperInvariant();
     }
+
     /// <summary>
     /// Returns a string representation of the monetary value. 
     /// </summary>
@@ -30,17 +35,39 @@ public record Money
     /// <summary>
     /// Adds two <see cref="Money"/> objects together.
     /// </summary>
-    /// <param name="other">The other <see cref="Money"/> object to add. If null, the original <see cref="Money"/> object is returned.</param>
+    /// <param name="other">The other <see cref="Money"/> object to add.</param>
     /// <returns>A new <see cref="Money"/> object representing the sum of the two monetary values.</returns>
-    public Money Add(Money? other)
+    /// <exception cref="InvalidOperationException">Thrown when the currencies do not match.</exception>
+    public Money Add(Money other)
     {
-        return other == null ? this : new Money(Amount + other.Amount, Currency);
+        if (Currency != other.Currency)
+            throw new InvalidOperationException($"Cannot add money with different currencies: '{Currency}' and '{other.Currency}'.");
+
+        return new Money(Amount + other.Amount, Currency);
     }
-    
+
     /// <summary>
-    /// Multiplies the monetary value by a factor.
+    /// Multiplies the monetary value by an integer factor.
     /// </summary>
     /// <param name="factor">The factor to multiply the monetary value by.</param>
     /// <returns>A new <see cref="Money"/> object representing the result of the multiplication.</returns>
-    public Money Multiply(int factor) => new(Amount * factor, Currency);
+    public Money Multiply(int factor) => Multiply((decimal)factor);
+
+    /// <summary>
+    /// Multiplies the monetary value by a decimal factor.
+    /// </summary>
+    /// <param name="factor">The factor to multiply the monetary value by.</param>
+    /// <returns>A new <see cref="Money"/> object representing the result of the multiplication.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when factor is negative.</exception>
+    public Money Multiply(decimal factor)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(factor);
+        return new Money(Amount * factor, Currency);
+    }
+
+    public static Money operator +(Money left, Money right) => left.Add(right);
+    public static Money operator *(Money money, decimal factor) => money.Multiply(factor);
+    public static Money operator *(decimal factor, Money money) => money.Multiply(factor);
+    public static Money operator *(Money money, int factor) => money.Multiply(factor);
+    public static Money operator *(int factor, Money money) => money.Multiply(factor);
 }
