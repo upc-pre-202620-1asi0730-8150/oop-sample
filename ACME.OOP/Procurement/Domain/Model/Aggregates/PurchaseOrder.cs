@@ -83,10 +83,7 @@ public class PurchaseOrder
     public Money CalculateTotal()
     {
         var total = new Money(0m, Currency);
-        foreach (var item in _items)
-        {
-            total += item.CalculateItemTotal();
-        }
+        foreach (var item in _items) total += item.CalculateItemTotal();
         return total;
     }
 }
