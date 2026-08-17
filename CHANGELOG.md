@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `PurchaseOrder.AddItem` to merge quantities when adding items for an existing `ProductId`.
 - Replaced manual argument validation with standard .NET throw helpers (`ArgumentException.ThrowIfNullOrWhiteSpace`, `ArgumentOutOfRangeException.ThrowIfNegativeOrZero`).
 - Updated `docs/class-diagram.puml` and `Program.cs` entry point to reflect modernized domain types and APIs.
+- Modernized `README.md` with .NET 10 / C# 14 technical specifications, domain-driven design taxonomy, domain invariants, and a comprehensive documentation index.
 
 ## [1.0.0] - 2026-08-17
 
