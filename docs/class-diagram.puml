@@ -3,13 +3,13 @@ skinparam monochrome true
 
 package "ACME.OOP.SCM" {
   class "Supplier" as Supplier {
-    +Code: string {readonly}
+    +Id: SupplierId {readonly}
     +Name: string {readonly}
     +Address: Address {readonly}
   }
 
   class "SupplierId" as SupplierId {
-    +Id: string {readonly}
+    +Identifier: string {readonly}
   }
 
   Supplier "1" --> "1" SupplierId : relates to
@@ -19,7 +19,7 @@ package "ACME.OOP.Procurement" {
   class "PurchaseOrder" as PO {
     +OrderNumber: string {readonly}
     +SupplierId: SupplierId {readonly}
-    +OrderDate: DateTime {readonly}
+    +OrderDate: DateOnly {readonly}
     +Currency: string {readonly}
     +AddItem(productId: ProductId, quantity: int, unitPriceAmount: decimal)
     +CalculateTotal(): Money
@@ -47,6 +47,7 @@ package "ACME.OOP.Shared" {
     +Amount: decimal {readonly}
     +Currency: string {readonly}
     +Add(money: Money): Money
+    +Multiply(factor: decimal): Money
   }
 
   class "Address" as Address {
@@ -65,7 +66,7 @@ package "ACME.OOP.Shared" {
 note right of PO
   Aggregate Root
   Controls creation of PurchaseOrderItem
-  Enforces single currency for all item
+  Enforces single currency for all items
 end note
 
 note right of POItem
@@ -73,7 +74,7 @@ note right of POItem
 end note
 
 note right of ProductId
-  Value Object
+  Value Object (UUIDv7)
   Uses Guid for unique product identification
 end note
 
@@ -84,6 +85,7 @@ end note
 
 note right of Money
   Value Object
+  Enforces currency invariants and operator overloads
 end note
 
 note right of Address
