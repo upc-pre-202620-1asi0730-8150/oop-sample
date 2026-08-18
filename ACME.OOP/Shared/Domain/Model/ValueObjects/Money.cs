@@ -23,15 +23,14 @@ public readonly record struct Money
     /// The currency.
     /// </summary>
     /// <exception cref="ArgumentException">Thrown when the currency is not a valid 3-letter ISO code.</exception>
-    public string Currency
+    public Currency Currency
     {
         get;
         init
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(value);
-            if (value.Length != 3 || !value.All(char.IsAsciiLetter))
-                throw new ArgumentException("Currency must be a valid 3-letter ISO code.", nameof(value));
-            field = value.ToUpperInvariant();
+            if (value == default)
+                throw new ArgumentException("Currency is required.", nameof(Currency));
+            field = value;
         }
     }
 
@@ -42,11 +41,20 @@ public readonly record struct Money
     /// <param name="currency">The currency.</param>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when the amount is negative.</exception>
     /// <exception cref="ArgumentException">Thrown when the currency is not a valid 3-letter ISO code.</exception>
-    public Money(decimal amount, string currency)
+    public Money(decimal amount, Currency currency)
     {
         Amount = amount;
-        Currency = currency.ToUpperInvariant();
+        Currency = currency;
     }
+
+    /// <summary>
+    /// Creates a new instance of <see cref="Money"/> with the specified amount and currency code.
+    /// </summary>
+    /// <param name="amount">The monetary amount.</param>
+    /// <param name="currencyCode">The currency code.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the amount is negative.</exception>
+    /// <exception cref="ArgumentException">Thrown when the currency code is not a valid 3-letter ISO code.</exception>
+    public Money(decimal amount, string currencyCode) : this(amount, new Currency(currencyCode)) { }
 
     /// <summary>
     /// Returns a string representation of the monetary value. 
