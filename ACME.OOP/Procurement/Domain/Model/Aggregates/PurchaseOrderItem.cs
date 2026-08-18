@@ -8,8 +8,28 @@ namespace ACME.OOP.Procurement.Domain.Model.Aggregates;
 /// </summary>
 public class PurchaseOrderItem
 {
+    /// <summary>
+    /// The product identifier.
+    /// </summary>
     public ProductId ProductId { get; }
-    public int Quantity { get; }
+
+    /// <summary>
+    /// The quantity of the product.
+    /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the quantity is less than or equal to zero.</exception>
+    public int Quantity
+    {
+        get;
+        private set
+        {
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
+            field = value;
+        }
+    }
+
+    /// <summary>
+    /// The unit price of the product.
+    /// </summary>
     public Money UnitPrice { get; }
 
     /// <summary>
@@ -20,11 +40,24 @@ public class PurchaseOrderItem
     /// <param name="unitPrice">The unit price of the product, which is a non-null <see cref="Money"/> object.</param>
     internal PurchaseOrderItem(ProductId productId, int quantity, Money unitPrice)
     {
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(quantity);
-
+        if (productId == default)
+            throw new ArgumentException("Product ID is required.", nameof(productId));
+        if (unitPrice == default)
+            throw new ArgumentException("Unit price is required.", nameof(unitPrice));
         ProductId = productId;
         Quantity = quantity;
         UnitPrice = unitPrice;
+    }
+
+    /// <summary>
+    /// Increases the quantity of the item by the specified amount.
+    /// </summary>
+    /// <param name="additionalQuantity">The additional quantity to add, which must be greater than zero.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the additional quantity is less than or equal to zero.</exception>
+    internal void IncreaseQuantity(int additionalQuantity)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(additionalQuantity);
+        Quantity += additionalQuantity;
     }
     
     /// <summary>
