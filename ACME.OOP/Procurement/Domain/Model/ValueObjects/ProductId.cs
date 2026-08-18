@@ -1,24 +1,30 @@
 namespace ACME.OOP.Procurement.Domain.Model.ValueObjects;
 
 /// <summary>
-/// Represents a product identifier value object in the Procurement bounded context. 
+/// Represents a product identifier value object in the Procurement bounded-context. 
 /// </summary>
 public readonly record struct ProductId
 {
-    public Guid Id { get; init; }
+    /// <summary>
+    /// The unique identifier for the product.
+    /// </summary>
+    /// <exception cref="ArgumentException">Thrown when the identifier is an empty GUID.</exception>
+    public Guid Id
+    {
+        get;
+        init
+        {
+            if (value == Guid.Empty)
+                throw new ArgumentException("Product ID cannot be an empty GUID.", nameof(value));
+            field = value;
+        }
+    }
 
     /// <summary>
     /// Creates a new instance of <see cref="ProductId"/>. 
     /// </summary>
     /// <param name="id">The product identifier, which must be a non-empty Guid object.</param>
-    /// <exception cref="ArgumentException">Thrown when the identifier is an empty GUID.</exception>   
-    public ProductId(Guid id)
-    {
-        if (id == Guid.Empty)
-            throw new ArgumentException("Product ID cannot be an empty GUID.", nameof(id));
-
-        Id = id;
-    }
+    public ProductId(Guid id) => Id = id;
 
     /// <summary>
     /// Creates a new instance of <see cref="ProductId"/> using a time-ordered UUIDv7. 
