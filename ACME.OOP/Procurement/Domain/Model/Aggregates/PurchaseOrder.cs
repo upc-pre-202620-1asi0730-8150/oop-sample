@@ -75,17 +75,16 @@ public class PurchaseOrder
             throw new ArgumentException("Product ID is required.", nameof(productId));
         
         var unitPrice = new Money(unitPriceAmount, Currency);
-        var existingIndex = _items.FindIndex(item => item.ProductId == productId);
+        var existing = _items.Find(item => item.ProductId == productId);
 
-        if (existingIndex >= 0)
+        if (existing is not null)
         {
-            var existing = _items[existingIndex];
-            _items[existingIndex] = new PurchaseOrderItem(productId, existing.Quantity + quantity, unitPrice);
+            if (existing.UnitPrice != unitPrice)
+                throw new InvalidOperationException($"Cannot add product {productId} at {unitPrice}; the order already has it at {existing.UnitPrice}.");
+            existing.IncreaseQuantity(quantity);
+            return;
         }
-        else
-        {
-            _items.Add(new PurchaseOrderItem(productId, quantity, unitPrice));
-        }
+        _items.Add(new PurchaseOrderItem(productId, quantity, unitPrice));
     }
 
     /// <summary>
