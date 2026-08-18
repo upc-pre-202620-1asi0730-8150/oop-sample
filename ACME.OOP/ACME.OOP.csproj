@@ -7,7 +7,7 @@
         <Nullable>enable</Nullable>
         <UseAppHost>false</UseAppHost>
         <Version>1.1.0</Version>
-        <LangVersion>latest</LangVersion>
+        <LangVersion>14</LangVersion>
     </PropertyGroup>
 
 </Project>
