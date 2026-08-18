@@ -1,17 +1,21 @@
 ﻿using ACME.OOP.Procurement.Domain.Model.Aggregates;
 using ACME.OOP.Procurement.Domain.Model.ValueObjects;
+using ACME.OOP.Procurement.Presentation;
 using ACME.OOP.SCM.Domain.Model.Aggregates;
 using ACME.OOP.SCM.Domain.Model.ValueObjects;
 using ACME.OOP.Shared.Domain.Model.ValueObjects;
+using ACME.OOP.Shared.Presentation;
 
 var supplierAddress = new Address("Supplier St", "123", "SupplierCity", null, "12345", "United States");
 var supplier = new Supplier(new SupplierId("SUP001"), "Microsoft, Inc.", supplierAddress);
 var salesOfDay = new Money(0, "USD");
 var purchaseOrder = new PurchaseOrder("PO001", supplier.Id, DateOnly.FromDateTime(DateTime.Now), "USD");
-purchaseOrder.AddItem(ProductId.New(), 10, 25.99m);
+var sharedProduct = ProductId.New();
+purchaseOrder.AddItem(sharedProduct, 10, 25.99m);
+purchaseOrder.AddItem(sharedProduct, 5, 25.99m);
 purchaseOrder.AddItem(ProductId.New(), 20, 19.99m);
 
-Console.WriteLine($"Purchase Order {purchaseOrder.OrderNumber} created for Supplier ID {purchaseOrder.SupplierId.Identifier} in {purchaseOrder.Currency} on {purchaseOrder.OrderDate}");
+Console.WriteLine(purchaseOrder.Summary);
 foreach (var item in purchaseOrder.Items)
 {
     Console.Write($"Order Item: {item.ProductId} x {item.Quantity} at Unit Price of {item.UnitPrice} ");   
@@ -19,6 +23,15 @@ foreach (var item in purchaseOrder.Items)
 }
 Console.WriteLine($"Order Total: {purchaseOrder.CalculateTotal()}");
 
-Console.WriteLine($"Sales for the day: {salesOfDay.Add(purchaseOrder.CalculateTotal())}");
+try
+{
+    purchaseOrder.AddItem(sharedProduct, 1, 9.99m);
+}
+catch (InvalidOperationException ex)
+{
+    Console.WriteLine($"Rejected conflicting unit price: {ex.Message}");
+}
+
+Console.WriteLine($"Sales for the day: {salesOfDay.Add(purchaseOrder.CalculateTotal()).Display}");
 
 Console.WriteLine($"Supplier: {supplier.Name} is located at {supplier.Address}");
