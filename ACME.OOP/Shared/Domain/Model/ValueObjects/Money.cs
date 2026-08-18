@@ -5,8 +5,35 @@ namespace ACME.OOP.Shared.Domain.Model.ValueObjects;
 /// </summary>
 public readonly record struct Money
 {
-    public decimal Amount { get; init; }
-    public string Currency { get; init; }
+    /// <summary>
+    /// The underlying amount.
+    /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the amount is negative.</exception>
+    public decimal Amount
+    {
+        get;
+        init
+        {
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
+            field = value;
+        }
+    }
+
+    /// <summary>
+    /// The currency.
+    /// </summary>
+    /// <exception cref="ArgumentException">Thrown when the currency is not a valid 3-letter ISO code.</exception>
+    public string Currency
+    {
+        get;
+        init
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(value);
+            if (value.Length != 3 || !value.All(char.IsAsciiLetter))
+                throw new ArgumentException("Currency must be a valid 3-letter ISO code.", nameof(value));
+            field = value.ToUpperInvariant();
+        }
+    }
 
     /// <summary>
     /// Creates a new instance of <see cref="Money"/>. 
@@ -17,11 +44,6 @@ public readonly record struct Money
     /// <exception cref="ArgumentException">Thrown when the currency is not a valid 3-letter ISO code.</exception>
     public Money(decimal amount, string currency)
     {
-        ArgumentOutOfRangeException.ThrowIfNegative(amount);
-        ArgumentException.ThrowIfNullOrWhiteSpace(currency);
-        if (currency.Length != 3)
-            throw new ArgumentException("Currency must be a valid 3-letter ISO code.", nameof(currency));
-
         Amount = amount;
         Currency = currency.ToUpperInvariant();
     }
@@ -41,7 +63,8 @@ public readonly record struct Money
     public Money Add(Money other)
     {
         if (Currency != other.Currency)
-            throw new InvalidOperationException($"Cannot add money with different currencies: '{Currency}' and '{other.Currency}'.");
+            throw new InvalidOperationException(
+                $"Cannot add money with different currencies: '{Currency}' and '{other.Currency}'.");
 
         return new Money(Amount + other.Amount, Currency);
     }
