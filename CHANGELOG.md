@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.0] - 2026-08-17
 
 ### Added
+- Comprehensive XMLDoc documentation across all domain aggregates, value objects, presentation extensions, and automated unit test fixtures.
+- Enabled `<GenerateDocumentationFile>true</GenerateDocumentationFile>` in `Acme.OOProgramming.csproj` to enforce XML documentation generation during compilation.
 - Automated unit test suite (`Acme.OOProgramming.Tests`) using xUnit covering all domain aggregates, value objects, and presentation extensions across `Shared`, `SupplyChain`, and `Procurement` bounded contexts.
 - Architecture Decision Records (ADRs) in `docs/adrs.md` documenting decisions on bounded contexts, aggregate invariants, value objects, UUIDv7, and `DateOnly` modeling.
 - Support for UUIDv7 time-ordered identifier generation via `Guid.CreateVersion7()` in `ProductId.New()`.
