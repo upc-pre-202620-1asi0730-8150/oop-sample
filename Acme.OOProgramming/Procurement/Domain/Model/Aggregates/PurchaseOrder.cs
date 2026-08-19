@@ -5,18 +5,36 @@ using Acme.OOProgramming.SupplyChain.Domain.Model.ValueObjects;
 namespace Acme.OOProgramming.Procurement.Domain.Model.Aggregates;
 
 /// <summary>
-/// Represents a purchase order aggregate root in the 'Procurement' bounded context. 
+/// Represents a purchase order aggregate root in the Procurement bounded context. 
 /// </summary>
 public class PurchaseOrder
 {
     private readonly List<PurchaseOrderItem> _items = [];
     private IReadOnlyList<PurchaseOrderItem>? _itemsView;
 
+    /// <summary>
+    /// Gets the unique purchase order number.
+    /// </summary>
     public string OrderNumber { get; }
+
+    /// <summary>
+    /// Gets the identifier of the supplier associated with this purchase order.
+    /// </summary>
     public SupplierId SupplierId { get; }
+
+    /// <summary>
+    /// Gets the order date.
+    /// </summary>
     public DateOnly OrderDate { get; }
+
+    /// <summary>
+    /// Gets the currency enforced across all items in this purchase order.
+    /// </summary>
     public Currency Currency { get; }
 
+    /// <summary>
+    /// Gets an immutable read-only view of the purchase order items.
+    /// </summary>
     public IReadOnlyList<PurchaseOrderItem> Items => _itemsView ??= _items.AsReadOnly();
 
     /// <summary>

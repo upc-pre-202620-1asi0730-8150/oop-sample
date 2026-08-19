@@ -4,7 +4,7 @@ using Acme.OOProgramming.SupplyChain.Domain.Model.ValueObjects;
 namespace Acme.OOProgramming.SupplyChain.Domain.Model.Aggregates;
 
 /// <summary>
-/// Represents a supplier aggregate in the Supply Chain Management (SCM) bounded context.
+/// Represents a supplier aggregate root in the Supply Chain bounded context.
 /// </summary>
 public class Supplier
 {

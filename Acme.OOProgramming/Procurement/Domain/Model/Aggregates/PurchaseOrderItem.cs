@@ -4,7 +4,7 @@ using Acme.OOProgramming.Shared.Domain.Model.ValueObjects;
 namespace Acme.OOProgramming.Procurement.Domain.Model.Aggregates;
 
 /// <summary>
-/// Represents a purchase order item in the 'Procurement' bounded context. 
+/// Represents a purchase order item entity in the Procurement bounded context. 
 /// </summary>
 public class PurchaseOrderItem
 {
