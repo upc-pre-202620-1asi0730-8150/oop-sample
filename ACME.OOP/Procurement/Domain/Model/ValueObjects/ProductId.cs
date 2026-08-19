@@ -21,6 +21,12 @@ public readonly record struct ProductId
     }
 
     /// <summary>
+    /// Prevents parameterless construction of <see cref="ProductId"/>.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Always thrown because a valid GUID is required.</exception>
+    public ProductId() => throw new InvalidOperationException("ProductId must be initialized with a non-empty GUID.");
+
+    /// <summary>
     /// Creates a new instance of <see cref="ProductId"/>. 
     /// </summary>
     /// <param name="id">The product identifier, which must be a non-empty Guid object.</param>

@@ -7,13 +7,19 @@ public readonly record struct SupplierId
 {
     public string Identifier
     {
-        get;
+        get => field ?? string.Empty;
         init
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
             field = value;
         }
     }
+
+    /// <summary>
+    /// Prevents parameterless construction of <see cref="SupplierId"/>.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Always thrown because an identifier is required.</exception>
+    public SupplierId() => throw new InvalidOperationException("SupplierId must be initialized with a non-empty identifier.");
 
     /// <summary>
     /// Creates a new instance of <see cref="SupplierId"/>. 

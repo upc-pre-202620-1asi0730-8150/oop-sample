@@ -11,7 +11,7 @@ public readonly record struct Currency
     /// <exception cref="ArgumentException">Thrown when the currency code is null, empty, or not a valid 3-letter ISO 4217 alphabetic code.</exception>
     public string Code
     {
-        get;
+        get => field ?? string.Empty;
         init
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
@@ -21,6 +21,12 @@ public readonly record struct Currency
         }
     }
     
+    /// <summary>
+    /// Prevents parameterless construction of <see cref="Currency"/>.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Always thrown because a currency code is required.</exception>
+    public Currency() => throw new InvalidOperationException("Currency must be initialized with a valid 3-letter ISO 4217 code.");
+
     /// <summary>
     /// Creates a new instance of <see cref="Currency"/>.
     /// </summary>

@@ -11,7 +11,7 @@ public readonly record struct Address
     /// <exception cref="ArgumentException">Thrown when the address street is null, blank, or exceeds 100 characters.</exception>
     public string Street
     {
-        get;
+        get => field ?? string.Empty;
         init
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
@@ -27,7 +27,7 @@ public readonly record struct Address
     /// <exception cref="ArgumentException">Thrown when the street address number is null, blank, or exceeds 10 characters.</exception>
     public string Number
     {
-        get;
+        get => field ?? string.Empty;
         init
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
@@ -43,7 +43,7 @@ public readonly record struct Address
     /// <exception cref="ArgumentException">Thrown when the city is null, blank, or exceeds 100 characters.</exception>
     public string City
     {
-        get;
+        get => field ?? string.Empty;
         init
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
@@ -64,7 +64,7 @@ public readonly record struct Address
     /// <exception cref="ArgumentException">Thrown when the postal code is null, blank, or exceeds 20 characters.</exception>
     public string PostalCode
     {
-        get;
+        get => field ?? string.Empty;
         init
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
@@ -80,7 +80,7 @@ public readonly record struct Address
     /// <exception cref="ArgumentException">Thrown when the country is null, blank, or exceeds 100 characters.</exception>
     public string Country
     {
-        get;
+        get => field ?? string.Empty;
         init
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
@@ -89,6 +89,12 @@ public readonly record struct Address
             field = value;
         }
     }
+
+    /// <summary>
+    /// Prevents parameterless construction of <see cref="Address"/>.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Always thrown because address components are required.</exception>
+    public Address() => throw new InvalidOperationException("Address must be initialized with street, number, city, postal code, and country.");
 
     /// <summary>
     /// Creates a new instance of <see cref="Address"/>. 
