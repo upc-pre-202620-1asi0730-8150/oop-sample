@@ -37,7 +37,7 @@ public class Supplier
         init
         {
             if (value == default)
-                throw new ArgumentException("Address cannot an empty address.", nameof(value));
+                throw new ArgumentException("Address cannot be an empty address.", nameof(value));
             field = value;
         }
     }

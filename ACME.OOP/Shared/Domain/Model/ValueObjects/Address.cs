@@ -8,7 +8,7 @@ public readonly record struct Address
     /// <summary>
     /// The street address.
     /// </summary>
-    /// <exception cref="ArgumentException">Thrown when the address street is null, blank, or exceeds 100 characters.</exception>
+    /// <exception cref="ArgumentException">Thrown when the street is null, blank, or exceeds 100 characters.</exception>
     public string Street
     {
         get => field ?? string.Empty;
@@ -16,7 +16,7 @@ public readonly record struct Address
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
             if (value.Length > 100)
-                throw new ArgumentException("Street address street cannot exceed 100 characters.", nameof(value));
+                throw new ArgumentException("Street cannot exceed 100 characters.", nameof(value));
             field = value;
         }
     }
@@ -24,7 +24,7 @@ public readonly record struct Address
     /// <summary>
     /// The street address number.
     /// </summary>
-    /// <exception cref="ArgumentException">Thrown when the street address number is null, blank, or exceeds 10 characters.</exception>
+    /// <exception cref="ArgumentException">Thrown when the number is null, blank, or exceeds 10 characters.</exception>
     public string Number
     {
         get => field ?? string.Empty;
@@ -32,7 +32,7 @@ public readonly record struct Address
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
             if (value.Length > 10)
-                throw new ArgumentException("Street address number cannot exceed 10 characters.", nameof(value));
+                throw new ArgumentException("Number cannot exceed 10 characters.", nameof(value));
             field = value;
         }
     }
@@ -48,7 +48,7 @@ public readonly record struct Address
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
             if (value.Length > 100)
-                throw new ArgumentException("Street address city cannot exceed 100 characters.", nameof(value));
+                throw new ArgumentException("City cannot exceed 100 characters.", nameof(value));
             field = value;
         }
     }
@@ -69,7 +69,7 @@ public readonly record struct Address
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
             if (value.Length > 20)
-                throw new ArgumentException("Street address postal code cannot exceed 20 characters.", nameof(value));
+                throw new ArgumentException("Postal code cannot exceed 20 characters.", nameof(value));
             field = value;
         }
     }
@@ -85,7 +85,7 @@ public readonly record struct Address
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
             if (value.Length > 100)
-                throw new ArgumentException("Street address country cannot exceed 100 characters.", nameof(value));
+                throw new ArgumentException("Country cannot exceed 100 characters.", nameof(value));
             field = value;
         }
     }
