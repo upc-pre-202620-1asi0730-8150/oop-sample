@@ -1,6 +1,6 @@
-using ACME.OOP.Shared.Domain.Model.ValueObjects;
+using Acme.OOProgramming.Shared.Domain.Model.ValueObjects;
 
-namespace ACME.OOP.Shared.Presentation;
+namespace Acme.OOProgramming.Shared.Presentation;
 
 /// <summary>
 /// Provides console formatting methods for value objects. 

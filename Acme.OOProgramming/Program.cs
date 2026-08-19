@@ -1,10 +1,10 @@
-﻿using ACME.OOP.Procurement.Domain.Model.Aggregates;
-using ACME.OOP.Procurement.Domain.Model.ValueObjects;
-using ACME.OOP.Procurement.Presentation;
-using ACME.OOP.Shared.Domain.Model.ValueObjects;
-using ACME.OOP.Shared.Presentation;
-using ACME.OOP.SupplyChain.Domain.Model.Aggregates;
-using ACME.OOP.SupplyChain.Domain.Model.ValueObjects;
+﻿using Acme.OOProgramming.Procurement.Domain.Model.Aggregates;
+using Acme.OOProgramming.Procurement.Domain.Model.ValueObjects;
+using Acme.OOProgramming.Procurement.Presentation;
+using Acme.OOProgramming.Shared.Domain.Model.ValueObjects;
+using Acme.OOProgramming.Shared.Presentation;
+using Acme.OOProgramming.SupplyChain.Domain.Model.Aggregates;
+using Acme.OOProgramming.SupplyChain.Domain.Model.ValueObjects;
 
 var supplierAddress = new Address("Supplier St", "123", "SupplierCity", null, "12345", "United States");
 var supplier = new Supplier(new SupplierId("SUP001"), "Microsoft, Inc.", supplierAddress);

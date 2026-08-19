@@ -1,7 +1,7 @@
-using ACME.OOP.Procurement.Domain.Model.ValueObjects;
-using ACME.OOP.Shared.Domain.Model.ValueObjects;
+using Acme.OOProgramming.Procurement.Domain.Model.ValueObjects;
+using Acme.OOProgramming.Shared.Domain.Model.ValueObjects;
 
-namespace ACME.OOP.Procurement.Domain.Model.Aggregates;
+namespace Acme.OOProgramming.Procurement.Domain.Model.Aggregates;
 
 /// <summary>
 /// Represents a purchase order item in the 'Procurement' bounded context. 

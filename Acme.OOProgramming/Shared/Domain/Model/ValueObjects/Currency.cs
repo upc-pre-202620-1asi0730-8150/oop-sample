@@ -1,4 +1,4 @@
-namespace ACME.OOP.Shared.Domain.Model.ValueObjects;
+namespace Acme.OOProgramming.Shared.Domain.Model.ValueObjects;
 
 /// <summary>
 /// Represents a currency value object.

@@ -1,4 +1,4 @@
-namespace ACME.OOP.Procurement.Domain.Model.ValueObjects;
+namespace Acme.OOProgramming.Procurement.Domain.Model.ValueObjects;
 
 /// <summary>
 /// Represents a product identifier value object in the Procurement bounded-context. 

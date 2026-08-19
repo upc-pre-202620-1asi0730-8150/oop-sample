@@ -1,7 +1,7 @@
-using ACME.OOP.Shared.Domain.Model.ValueObjects;
-using ACME.OOP.SupplyChain.Domain.Model.ValueObjects;
+using Acme.OOProgramming.Shared.Domain.Model.ValueObjects;
+using Acme.OOProgramming.SupplyChain.Domain.Model.ValueObjects;
 
-namespace ACME.OOP.SupplyChain.Domain.Model.Aggregates;
+namespace Acme.OOProgramming.SupplyChain.Domain.Model.Aggregates;
 
 /// <summary>
 /// Represents a supplier aggregate in the Supply Chain Management (SCM) bounded context.

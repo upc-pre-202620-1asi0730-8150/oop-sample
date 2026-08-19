@@ -1,6 +1,6 @@
-using ACME.OOP.Procurement.Domain.Model.Aggregates;
+using Acme.OOProgramming.Procurement.Domain.Model.Aggregates;
 
-namespace ACME.OOP.Procurement.Presentation;
+namespace Acme.OOProgramming.Procurement.Presentation;
 
 /// <summary>
 /// Provides console formatting methods for purchase orders.
