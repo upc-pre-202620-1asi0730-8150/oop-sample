@@ -2,55 +2,60 @@
 skinparam monochrome true
 
 package "ACME.OOP.SCM" {
-  class "Supplier" as Supplier {
+  class "Supplier" as Supplier <<Aggregate Root>> {
     +Id: SupplierId {readonly}
     +Name: string {readonly}
     +Address: Address {readonly}
   }
 
-  class "SupplierId" as SupplierId {
+  class "SupplierId" as SupplierId <<Value Object>> {
     +Identifier: string {readonly}
   }
 
-  Supplier "1" --> "1" SupplierId : relates to
+  Supplier "1" --> "1" SupplierId : identifies
 }
 
 package "ACME.OOP.Procurement" {
-  class "PurchaseOrder" as PO {
+  class "PurchaseOrder" as PO <<Aggregate Root>> {
     +OrderNumber: string {readonly}
     +SupplierId: SupplierId {readonly}
     +OrderDate: DateOnly {readonly}
-    +Currency: string {readonly}
+    +Currency: Currency {readonly}
+    +Items: IReadOnlyList<PurchaseOrderItem> {readonly}
     +AddItem(productId: ProductId, quantity: int, unitPriceAmount: decimal)
     +CalculateTotal(): Money
   }
 
-  class "PurchaseOrderItem" as POItem {
+  class "PurchaseOrderItem" as POItem <<Entity>> {
     +ProductId: ProductId {readonly}
     +Quantity: int {readonly}
     +UnitPrice: Money {readonly}
     +CalculateItemTotal(): Money
   }
 
-  class "ProductId" as ProductId {
+  class "ProductId" as ProductId <<Value Object>> {
     +Id: Guid {readonly}
     +New(): ProductId
   }
 
   PO "1" --> "1" SupplierId
-  PO "1" --> "*" POItem
+  PO "1" *--> "*" POItem : contains
   POItem "1" --> "1" ProductId
 }
 
 package "ACME.OOP.Shared" {
-  class "Money" as Money {
+  class "Currency" as Currency <<Value Object>> {
+    +Code: string {readonly}
+  }
+
+  class "Money" as Money <<Value Object>> {
     +Amount: decimal {readonly}
-    +Currency: string {readonly}
+    +Currency: Currency {readonly}
     +Add(money: Money): Money
     +Multiply(factor: decimal): Money
   }
 
-  class "Address" as Address {
+  class "Address" as Address <<Value Object>> {
     +Street: string {readonly}
     +Number: string {readonly}
     +City: string {readonly}
@@ -59,7 +64,9 @@ package "ACME.OOP.Shared" {
     +Country: string {readonly}
   }
 
+  PO "1" --> "1" Currency
   POItem "1" --> "1" Money
+  Money "1" --> "1" Currency
   Supplier "1" --> "1" Address
 }
 
@@ -81,6 +88,11 @@ end note
 note right of SupplierId
   Value Object
   Identifies Supplier in SCM context
+end note
+
+note right of Currency
+  Value Object (ISO 4217)
+  3-letter alphabetic currency code
 end note
 
 note right of Money
