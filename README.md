@@ -18,7 +18,7 @@
   * **UUIDv7 Identifiers**: Time-ordered, sequential unique identifiers via `Guid.CreateVersion7()`.
   * **`DateOnly` Temporal Modeling**: Timezone- and time-of-day-free business dates for purchase orders.
   * **Collection Expressions (`[]`) & Modern Syntax**: Clean, expressive initialization across collections and arrays.
-  * **Nullability & Modern Throw Helpers**: Strict nullable reference types (`<Nullable>enable</Nullable>`) and `ArgumentNullException.ThrowIfNullOrWhiteSpace`.
+  * **Nullability & Modern Throw Helpers**: Strict nullable reference types (`<Nullable>enable</Nullable>`) and `ArgumentException.ThrowIfNullOrWhiteSpace`.
 
 ---
 
