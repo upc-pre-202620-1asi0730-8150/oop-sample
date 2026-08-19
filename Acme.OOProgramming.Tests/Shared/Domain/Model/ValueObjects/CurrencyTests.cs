@@ -2,14 +2,24 @@ using Acme.OOProgramming.Shared.Domain.Model.ValueObjects;
 
 namespace Acme.OOProgramming.Tests.Shared.Domain.Model.ValueObjects;
 
+/// <summary>
+/// Contains unit tests for the <see cref="Currency"/> value object.
+/// </summary>
 public class CurrencyTests
 {
+    /// <summary>
+    /// Verifies that calling the parameterless constructor throws an <see cref="InvalidOperationException"/>.
+    /// </summary>
     [Fact]
     public void ParameterlessConstructor_ThrowsInvalidOperationException()
     {
         Assert.Throws<InvalidOperationException>(() => new Currency());
     }
 
+    /// <summary>
+    /// Verifies that constructing a <see cref="Currency"/> with valid ISO 4217 codes succeeds.
+    /// </summary>
+    /// <param name="code">The valid currency code.</param>
     [Theory]
     [InlineData("USD")]
     [InlineData("EUR")]
@@ -23,6 +33,10 @@ public class CurrencyTests
         Assert.Equal(code, currency.ToString());
     }
 
+    /// <summary>
+    /// Verifies that constructing a <see cref="Currency"/> with null or whitespace throws an <see cref="ArgumentException"/>.
+    /// </summary>
+    /// <param name="code">The invalid null or whitespace currency code.</param>
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -32,6 +46,10 @@ public class CurrencyTests
         Assert.ThrowsAny<ArgumentException>(() => new Currency(code!));
     }
 
+    /// <summary>
+    /// Verifies that currency codes with invalid length throw an <see cref="ArgumentException"/>.
+    /// </summary>
+    /// <param name="code">The invalid length currency code.</param>
     [Theory]
     [InlineData("US")]
     [InlineData("USDD")]
@@ -41,6 +59,10 @@ public class CurrencyTests
         Assert.Throws<ArgumentException>(() => new Currency(code));
     }
 
+    /// <summary>
+    /// Verifies that currency codes containing non-alphabetic characters throw an <see cref="ArgumentException"/>.
+    /// </summary>
+    /// <param name="code">The invalid non-alphabetic code.</param>
     [Theory]
     [InlineData("U1D")]
     [InlineData("US$")]
@@ -50,6 +72,9 @@ public class CurrencyTests
         Assert.Throws<ArgumentException>(() => new Currency(code));
     }
 
+    /// <summary>
+    /// Verifies that an uninitialized default <see cref="Currency"/> struct returns an empty string for <see cref="Currency.Code"/>.
+    /// </summary>
     [Fact]
     public void DefaultStruct_CodeReturnsEmptyString()
     {
@@ -58,6 +83,9 @@ public class CurrencyTests
         Assert.Equal(string.Empty, defaultCurrency.Code);
     }
 
+    /// <summary>
+    /// Verifies value equality across <see cref="Currency"/> instances.
+    /// </summary>
     [Fact]
     public void Equality_SameCodes_AreEqual()
     {

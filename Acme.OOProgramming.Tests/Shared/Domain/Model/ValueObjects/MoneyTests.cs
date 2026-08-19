@@ -2,14 +2,23 @@ using Acme.OOProgramming.Shared.Domain.Model.ValueObjects;
 
 namespace Acme.OOProgramming.Tests.Shared.Domain.Model.ValueObjects;
 
+/// <summary>
+/// Contains unit tests for the <see cref="Money"/> value object.
+/// </summary>
 public class MoneyTests
 {
+    /// <summary>
+    /// Verifies that invoking the parameterless constructor throws an <see cref="InvalidOperationException"/>.
+    /// </summary>
     [Fact]
     public void ParameterlessConstructor_ThrowsInvalidOperationException()
     {
         Assert.Throws<InvalidOperationException>(() => new Money());
     }
 
+    /// <summary>
+    /// Verifies that constructing a <see cref="Money"/> instance with valid amount and currency initializes successfully.
+    /// </summary>
     [Fact]
     public void Constructor_WithValidAmountAndCurrency_InitializesSuccessfully()
     {
@@ -21,6 +30,9 @@ public class MoneyTests
         Assert.Equal("100.50 USD", money.ToString());
     }
 
+    /// <summary>
+    /// Verifies that constructing a <see cref="Money"/> instance with a string currency code initializes successfully.
+    /// </summary>
     [Fact]
     public void Constructor_WithStringCurrencyCode_InitializesSuccessfully()
     {
@@ -30,6 +42,9 @@ public class MoneyTests
         Assert.Equal("EUR", money.Currency.Code);
     }
 
+    /// <summary>
+    /// Verifies that constructing a <see cref="Money"/> instance with a negative amount throws an <see cref="ArgumentOutOfRangeException"/>.
+    /// </summary>
     [Fact]
     public void Constructor_WithNegativeAmount_ThrowsArgumentOutOfRangeException()
     {
@@ -38,12 +53,18 @@ public class MoneyTests
         Assert.Throws<ArgumentOutOfRangeException>(() => new Money(-1.00m, "USD"));
     }
 
+    /// <summary>
+    /// Verifies that constructing a <see cref="Money"/> instance with a default currency throws an <see cref="ArgumentException"/>.
+    /// </summary>
     [Fact]
     public void Constructor_WithDefaultCurrency_ThrowsArgumentException()
     {
         Assert.Throws<ArgumentException>(() => new Money(10.00m, default(Currency)));
     }
 
+    /// <summary>
+    /// Verifies that adding two <see cref="Money"/> values with the same currency returns their combined sum.
+    /// </summary>
     [Fact]
     public void Add_WithSameCurrency_ReturnsCombinedSum()
     {
@@ -58,6 +79,9 @@ public class MoneyTests
         Assert.Equal(sumMethod, sumOp);
     }
 
+    /// <summary>
+    /// Verifies that adding two <see cref="Money"/> values with different currencies throws an <see cref="InvalidOperationException"/>.
+    /// </summary>
     [Fact]
     public void Add_WithDifferentCurrency_ThrowsInvalidOperationException()
     {
@@ -68,6 +92,9 @@ public class MoneyTests
         Assert.Throws<InvalidOperationException>(() => m1 + m2);
     }
 
+    /// <summary>
+    /// Verifies that adding an uninitialized default <see cref="Money"/> throws an <see cref="InvalidOperationException"/>.
+    /// </summary>
     [Fact]
     public void Add_WithDefaultMoney_ThrowsInvalidOperationException()
     {
@@ -80,6 +107,9 @@ public class MoneyTests
         Assert.Throws<InvalidOperationException>(() => defaultMoney + m1);
     }
 
+    /// <summary>
+    /// Verifies that multiplying a <see cref="Money"/> instance by a factor calculates the correct result.
+    /// </summary>
     [Fact]
     public void Multiply_WithValidFactor_ReturnsMultipliedAmount()
     {
@@ -95,6 +125,9 @@ public class MoneyTests
         Assert.Equal(resultMethod, resultOp2);
     }
 
+    /// <summary>
+    /// Verifies that multiplying a <see cref="Money"/> instance by a negative factor throws an <see cref="ArgumentOutOfRangeException"/>.
+    /// </summary>
     [Fact]
     public void Multiply_WithNegativeFactor_ThrowsArgumentOutOfRangeException()
     {
@@ -105,6 +138,9 @@ public class MoneyTests
         Assert.Throws<ArgumentOutOfRangeException>(() => -2m * money);
     }
 
+    /// <summary>
+    /// Verifies that multiplying an uninitialized default <see cref="Money"/> instance throws an <see cref="InvalidOperationException"/>.
+    /// </summary>
     [Fact]
     public void Multiply_WithDefaultMoney_ThrowsInvalidOperationException()
     {
@@ -115,6 +151,9 @@ public class MoneyTests
         Assert.Throws<InvalidOperationException>(() => 2m * defaultMoney);
     }
 
+    /// <summary>
+    /// Verifies value equality across <see cref="Money"/> instances.
+    /// </summary>
     [Fact]
     public void Equality_SameAmountAndCurrency_AreEqual()
     {
