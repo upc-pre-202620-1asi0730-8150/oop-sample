@@ -14,6 +14,8 @@ This document records the architectural and design decisions made for the ACME O
 * [ADR 003: Immutability and Value Semantics via `readonly record struct`](#adr-003-immutability-and-value-semantics-via-readonly-record-struct)
 * [ADR 004: Time-Ordered UUIDv7 for Product Identifiers](#adr-004-time-ordered-uuidv7-for-product-identifiers)
 * [ADR 005: Temporal Modeling with `DateOnly` for Order Dates](#adr-005-temporal-modeling-with-dateonly-for-order-dates)
+* [ADR 006: Presentation Decoupling via C# 14 Extension Members](#adr-006-presentation-decoupling-via-c-14-extension-members)
+* [ADR 007: Property Invariant Validation using C# 14 `field` Keyword](#adr-007-property-invariant-validation-using-c-14-field-keyword)
 
 ---
 
@@ -29,7 +31,7 @@ The application needs to model supply chain management and purchasing workflows.
 We partition the domain into distinct Bounded Contexts following Domain-Driven Design (DDD):
 1. **Supply Chain Management (`ACME.OOP.SCM`)**: Focuses on suppliers, supplier identities, and vendor profiles.
 2. **Procurement (`ACME.OOP.Procurement`)**: Focuses on purchase orders, line items, and purchasing workflows.
-3. **Shared Kernel (`ACME.OOP.Shared`)**: Contains common value objects shared across contexts (`Money`, `Address`).
+3. **Shared Kernel (`ACME.OOP.Shared`)**: Contains common value objects shared across contexts (`Money`, `Currency`, `Address`).
 
 Cross-context references (e.g., `PurchaseOrder` referencing a supplier) use strongly typed identifiers (`SupplierId`) rather than direct aggregate references.
 
@@ -48,19 +50,20 @@ Accepted
 Purchase orders contain line items that must follow specific business rules:
 * All line items must share the order's currency.
 * Total and item subtotal calculations must be consistent and guarded against negative quantities or prices.
-* Adding items with an existing product ID should merge quantities rather than create conflicting lines.
+* Adding items with an existing product ID should merge quantities rather than create conflicting lines, provided the unit price matches.
 * The lifecycle of line items is strictly bound to the purchase order.
 
 ### Decision
 We model `PurchaseOrder` as an **Aggregate Root** and `PurchaseOrderItem` as an internal entity within the aggregate boundary:
 * External callers cannot instantiate or modify `PurchaseOrderItem` directly; all item additions are mediated by `PurchaseOrder.AddItem(...)`.
 * `PurchaseOrder` creates line items using its own currency, ensuring single-currency consistency across all items.
-* `AddItem` handles quantity merging for duplicate products.
-* The items collection is exposed to callers as a read-only list (`IReadOnlyList<PurchaseOrderItem>`).
+* `AddItem` handles quantity merging for duplicate products and rejects conflicting unit prices.
+* The items collection is exposed to callers as a read-only list (`IReadOnlyList<PurchaseOrderItem>`) backed by a cached read-only view (`_itemsView`) to eliminate per-access allocation overhead.
 
 ### Consequences
 * **Positive**: Domain invariants are strictly protected; invalid aggregate states are impossible.
 * **Positive**: Consistent calculations for line totals and order totals.
+* **Positive**: Efficient zero-allocation access to aggregate item collections.
 * **Negative**: Line items cannot be manipulated independently of the aggregate root.
 
 ---
@@ -71,19 +74,20 @@ We model `PurchaseOrder` as an **Aggregate Root** and `PurchaseOrderItem` as an 
 Accepted
 
 ### Context
-Domain concepts such as `Money`, `Address`, `ProductId`, and `SupplierId` represent values without distinct mutable lifecycle identities. Using reference types (`class`) creates unnecessary heap allocations, garbage collection overhead, and mutable state risks. Furthermore, monetary arithmetic must prevent adding mismatched currencies.
+Domain concepts such as `Money`, `Currency`, `Address`, `ProductId`, and `SupplierId` represent values without distinct mutable lifecycle identities. Using reference types (`class`) creates unnecessary heap allocations, garbage collection overhead, and mutable state risks. Furthermore, monetary arithmetic must prevent adding mismatched currencies and protect against uninitialized struct defaults.
 
 ### Decision
 We implement all domain Value Objects as C# `readonly record struct`:
 * **Zero Allocation**: Instances are allocated on the stack or inline within containing aggregates.
 * **Structural Equality**: Equality is based on value fields rather than reference identity.
 * **Invariant Enforcement**: Constructors validate arguments using standard .NET throw helpers (`ArgumentException.ThrowIfNullOrWhiteSpace`, `ArgumentOutOfRangeException.ThrowIfNegative`).
-* **Operator Overloads**: `Money` defines explicit operators (`+`, `*`) enforcing currency parity before performing arithmetic.
+* **Default State Safety**: Value types define explicit parameterless constructors throwing `InvalidOperationException` and null-safe property accessors (`field ?? string.Empty`) to prevent uninitialized `default` struct states from corrupting domain models.
+* **Operator Overloads**: `Money` defines explicit operators (`+`, `*`) enforcing currency parity and initialized state checks before performing arithmetic.
 
 ### Consequences
 * **Positive**: High performance and zero GC overhead for value objects.
 * **Positive**: Enforces compile-time and runtime immutability.
-* **Positive**: Prevents cross-currency calculation bugs.
+* **Positive**: Prevents uninitialized default struct states and cross-currency calculation bugs.
 
 ---
 
@@ -120,3 +124,39 @@ We use `System.DateOnly` for `PurchaseOrder.OrderDate`.
 * **Positive**: Accurately reflects domain intent (calendar date of purchase).
 * **Positive**: Eliminates timezone conversion and time-of-day bugs.
 * **Negative**: Callers passing `DateTime` must convert using `DateOnly.FromDateTime(...)` (convenience constructor provided).
+
+---
+
+## ADR 006: Presentation Decoupling via C# 14 Extension Members
+
+### Status
+Accepted
+
+### Context
+Domain entities and value objects (such as `PurchaseOrder` and `Money`) should remain pure and decoupled from display, UI, or console formatting concerns. Adding string formatting methods directly to domain models mixes domain logic with presentation concerns.
+
+### Decision
+We use C# 14 implicit extension declarations (`extension(T target)`) located in separate presentation namespaces (`ACME.OOP.Procurement.Presentation`, `ACME.OOP.Shared.Presentation`) to provide presentation-specific properties and methods (e.g., `order.Summary`, `money.Display`) without polluting the domain models.
+
+### Consequences
+* **Positive**: Pure domain models adhering to Single Responsibility Principle (SRP).
+* **Positive**: Clean, discoverable syntax at call sites without requiring domain class modifications.
+* **Negative**: Presentation extension namespaces must be imported where display properties are consumed.
+
+---
+
+## ADR 007: Property Invariant Validation using C# 14 `field` Keyword
+
+### Status
+Accepted
+
+### Context
+Value objects and domain entities require validation in property setters or init-only accessors. Historically in C#, validating property values required declaring explicit, boilerplate private backing fields (e.g., `_code`, `_street`).
+
+### Decision
+We adopt the C# 14 `field` contextual keyword in property `init` and `get` accessors across domain models and value objects to enforce validations and fallback values directly without manual backing field declarations.
+
+### Consequences
+* **Positive**: Significantly reduces repetitive boilerplate code.
+* **Positive**: Keeps property definition, validation logic, and storage backing cohesive and readable.
+* **Negative**: Requires C# 14 language version compiler support.
