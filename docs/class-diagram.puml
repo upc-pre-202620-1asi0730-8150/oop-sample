@@ -1,7 +1,7 @@
 @startuml
 skinparam monochrome true
 
-package "ACME.OOP.SupplyChain" {
+package "Acme.OOProgramming.SupplyChain" {
   class "Supplier" as Supplier <<Aggregate Root>> {
     +Id: SupplierId {readonly}
     +Name: string {readonly}
@@ -15,7 +15,7 @@ package "ACME.OOP.SupplyChain" {
   Supplier "1" --> "1" SupplierId : identifies
 }
 
-package "ACME.OOP.Procurement" {
+package "Acme.OOProgramming.Procurement" {
   class "PurchaseOrder" as PO <<Aggregate Root>> {
     +OrderNumber: string {readonly}
     +SupplierId: SupplierId {readonly}
@@ -43,7 +43,7 @@ package "ACME.OOP.Procurement" {
   POItem "1" --> "1" ProductId
 }
 
-package "ACME.OOP.Shared" {
+package "Acme.OOProgramming.Shared" {
   class "Currency" as Currency <<Value Object>> {
     +Code: string {readonly}
   }
