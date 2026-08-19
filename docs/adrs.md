@@ -29,9 +29,9 @@ The application needs to model supply chain management and purchasing workflows.
 
 ### Decision
 We partition the domain into distinct Bounded Contexts following Domain-Driven Design (DDD):
-1. **Supply Chain Management (`ACME.OOP.SupplyChain`)**: Focuses on suppliers, supplier identities, and vendor profiles.
-2. **Procurement (`ACME.OOP.Procurement`)**: Focuses on purchase orders, line items, and purchasing workflows.
-3. **Shared Kernel (`ACME.OOP.Shared`)**: Contains common value objects shared across contexts (`Money`, `Currency`, `Address`).
+1. **Supply Chain Management (`Acme.OOProgramming.SupplyChain`)**: Focuses on suppliers, supplier identities, and vendor profiles.
+2. **Procurement (`Acme.OOProgramming.Procurement`)**: Focuses on purchase orders, line items, and purchasing workflows.
+3. **Shared Kernel (`Acme.OOProgramming.Shared`)**: Contains common value objects shared across contexts (`Money`, `Currency`, `Address`).
 
 Cross-context references (e.g., `PurchaseOrder` referencing a supplier) use strongly typed identifiers (`SupplierId`) rather than direct aggregate references.
 
@@ -136,7 +136,7 @@ Accepted
 Domain entities and value objects (such as `PurchaseOrder` and `Money`) should remain pure and decoupled from display, UI, or console formatting concerns. Adding string formatting methods directly to domain models mixes domain logic with presentation concerns.
 
 ### Decision
-We use C# 14 implicit extension declarations (`extension(T target)`) located in separate presentation namespaces (`ACME.OOP.Procurement.Presentation`, `ACME.OOP.Shared.Presentation`) to provide presentation-specific properties and methods (e.g., `order.Summary`, `money.Display`) without polluting the domain models.
+We use C# 14 implicit extension declarations (`extension(T target)`) located in separate presentation namespaces (`Acme.OOProgramming.Procurement.Presentation`, `Acme.OOProgramming.Shared.Presentation`) to provide presentation-specific properties and methods (e.g., `order.Summary`, `money.Display`) without polluting the domain models.
 
 ### Consequences
 * **Positive**: Pure domain models adhering to Single Responsibility Principle (SRP).

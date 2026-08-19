@@ -5,12 +5,18 @@ using Acme.OOProgramming.SupplyChain.Domain.Model.ValueObjects;
 
 namespace Acme.OOProgramming.Tests.Procurement.Domain.Model.Aggregates;
 
+/// <summary>
+/// Contains unit tests for the <see cref="PurchaseOrder"/> aggregate root.
+/// </summary>
 public class PurchaseOrderTests
 {
     private readonly SupplierId _supplierId = new("SUP-001");
     private readonly Currency _usd = new("USD");
     private readonly DateOnly _orderDate = new(2026, 8, 18);
 
+    /// <summary>
+    /// Verifies that constructing a <see cref="PurchaseOrder"/> with valid arguments initializes properties correctly.
+    /// </summary>
     [Fact]
     public void Constructor_WithValidArguments_InitializesSuccessfully()
     {
@@ -23,6 +29,9 @@ public class PurchaseOrderTests
         Assert.Empty(order.Items);
     }
 
+    /// <summary>
+    /// Verifies that constructing a <see cref="PurchaseOrder"/> with a string currency code initializes successfully.
+    /// </summary>
     [Fact]
     public void Constructor_WithStringCurrency_InitializesSuccessfully()
     {
@@ -32,6 +41,9 @@ public class PurchaseOrderTests
         Assert.Equal("EUR", order.Currency.Code);
     }
 
+    /// <summary>
+    /// Verifies that constructing a <see cref="PurchaseOrder"/> with a <see cref="DateTime"/> converts to <see cref="DateOnly"/> properly.
+    /// </summary>
     [Fact]
     public void Constructor_WithDateTime_InitializesSuccessfully()
     {
@@ -41,6 +53,10 @@ public class PurchaseOrderTests
         Assert.Equal(new DateOnly(2026, 8, 18), order.OrderDate);
     }
 
+    /// <summary>
+    /// Verifies that constructing a <see cref="PurchaseOrder"/> with null, empty, or whitespace order number throws an <see cref="ArgumentException"/>.
+    /// </summary>
+    /// <param name="orderNumber">The invalid order number.</param>
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -50,18 +66,27 @@ public class PurchaseOrderTests
         Assert.ThrowsAny<ArgumentException>(() => new PurchaseOrder(orderNumber!, _supplierId, _orderDate, _usd));
     }
 
+    /// <summary>
+    /// Verifies that constructing a <see cref="PurchaseOrder"/> with a default <see cref="SupplierId"/> throws an <see cref="ArgumentException"/>.
+    /// </summary>
     [Fact]
     public void Constructor_WithDefaultSupplierId_ThrowsArgumentException()
     {
         Assert.Throws<ArgumentException>(() => new PurchaseOrder("PO-1001", default(SupplierId), _orderDate, _usd));
     }
 
+    /// <summary>
+    /// Verifies that constructing a <see cref="PurchaseOrder"/> with a default <see cref="Currency"/> throws an <see cref="ArgumentException"/>.
+    /// </summary>
     [Fact]
     public void Constructor_WithDefaultCurrency_ThrowsArgumentException()
     {
         Assert.Throws<ArgumentException>(() => new PurchaseOrder("PO-1001", _supplierId, _orderDate, default(Currency)));
     }
 
+    /// <summary>
+    /// Verifies that accessing <see cref="PurchaseOrder.Items"/> returns a cached read-only instance rather than allocating on every call.
+    /// </summary>
     [Fact]
     public void Items_ReturnsCachedReadOnlyView()
     {
@@ -73,6 +98,9 @@ public class PurchaseOrderTests
         Assert.Same(view1, view2);
     }
 
+    /// <summary>
+    /// Verifies that adding a new item adds it to the purchase order items list.
+    /// </summary>
     [Fact]
     public void AddItem_WithValidArguments_AddsItemToOrder()
     {
@@ -89,6 +117,9 @@ public class PurchaseOrderTests
         Assert.Equal(_usd, item.UnitPrice.Currency);
     }
 
+    /// <summary>
+    /// Verifies that adding an item with a default <see cref="ProductId"/> throws an <see cref="ArgumentException"/>.
+    /// </summary>
     [Fact]
     public void AddItem_WithDefaultProductId_ThrowsArgumentException()
     {
@@ -97,6 +128,10 @@ public class PurchaseOrderTests
         Assert.Throws<ArgumentException>(() => order.AddItem(default, 5, 19.99m));
     }
 
+    /// <summary>
+    /// Verifies that adding an item with zero or negative quantity throws an <see cref="ArgumentOutOfRangeException"/>.
+    /// </summary>
+    /// <param name="quantity">The non-positive quantity value.</param>
     [Theory]
     [InlineData(0)]
     [InlineData(-1)]
@@ -108,6 +143,9 @@ public class PurchaseOrderTests
         Assert.Throws<ArgumentOutOfRangeException>(() => order.AddItem(productId, quantity, 19.99m));
     }
 
+    /// <summary>
+    /// Verifies that adding an item with a negative unit price throws an <see cref="ArgumentOutOfRangeException"/>.
+    /// </summary>
     [Fact]
     public void AddItem_WithNegativeUnitPrice_ThrowsArgumentOutOfRangeException()
     {
@@ -117,6 +155,9 @@ public class PurchaseOrderTests
         Assert.Throws<ArgumentOutOfRangeException>(() => order.AddItem(productId, 5, -10.00m));
     }
 
+    /// <summary>
+    /// Verifies that adding a duplicate product with matching unit price merges the quantities into the existing item.
+    /// </summary>
     [Fact]
     public void AddItem_WithDuplicateProductAndMatchingPrice_MergesQuantity()
     {
@@ -131,6 +172,9 @@ public class PurchaseOrderTests
         Assert.Equal(25.00m, order.Items[0].UnitPrice.Amount);
     }
 
+    /// <summary>
+    /// Verifies that adding a duplicate product with a conflicting unit price throws an <see cref="InvalidOperationException"/>.
+    /// </summary>
     [Fact]
     public void AddItem_WithDuplicateProductAndConflictingPrice_ThrowsInvalidOperationException()
     {
@@ -142,6 +186,9 @@ public class PurchaseOrderTests
         Assert.Throws<InvalidOperationException>(() => order.AddItem(productId, 5, 30.00m));
     }
 
+    /// <summary>
+    /// Verifies that calculating total for an empty purchase order returns zero money in the order currency.
+    /// </summary>
     [Fact]
     public void CalculateTotal_WithEmptyOrder_ReturnsZeroMoneyInOrderCurrency()
     {
@@ -153,6 +200,9 @@ public class PurchaseOrderTests
         Assert.Equal(_usd, total.Currency);
     }
 
+    /// <summary>
+    /// Verifies that calculating total across multiple items returns the accurate cumulative amount.
+    /// </summary>
     [Fact]
     public void CalculateTotal_WithMultipleItems_CalculatesAccurateTotal()
     {

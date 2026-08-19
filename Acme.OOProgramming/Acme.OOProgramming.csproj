@@ -6,8 +6,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <UseAppHost>false</UseAppHost>
-        <Version>1.1.0</Version>
+        <Version>1.2.0</Version>
         <LangVersion>14</LangVersion>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>

@@ -109,9 +109,43 @@ public readonly record struct Money
         return new Money(Amount * factor, Currency);
     }
 
+    /// <summary>
+    /// Gets the result of adding two <see cref="Money"/> instances.
+    /// </summary>
+    /// <param name="left">The first monetary operand.</param>
+    /// <param name="right">The second monetary operand.</param>
+    /// <returns>The sum of the two monetary values.</returns>
     public static Money operator +(Money left, Money right) => left.Add(right);
+
+    /// <summary>
+    /// Multiplies a <see cref="Money"/> value by a decimal factor.
+    /// </summary>
+    /// <param name="money">The monetary value.</param>
+    /// <param name="factor">The multiplier factor.</param>
+    /// <returns>The multiplied monetary value.</returns>
     public static Money operator *(Money money, decimal factor) => money.Multiply(factor);
+
+    /// <summary>
+    /// Multiplies a <see cref="Money"/> value by a decimal factor.
+    /// </summary>
+    /// <param name="factor">The multiplier factor.</param>
+    /// <param name="money">The monetary value.</param>
+    /// <returns>The multiplied monetary value.</returns>
     public static Money operator *(decimal factor, Money money) => money.Multiply(factor);
+
+    /// <summary>
+    /// Multiplies a <see cref="Money"/> value by an integer factor.
+    /// </summary>
+    /// <param name="money">The monetary value.</param>
+    /// <param name="factor">The multiplier factor.</param>
+    /// <returns>The multiplied monetary value.</returns>
     public static Money operator *(Money money, int factor) => money.Multiply(factor);
+
+    /// <summary>
+    /// Multiplies a <see cref="Money"/> value by an integer factor.
+    /// </summary>
+    /// <param name="factor">The multiplier factor.</param>
+    /// <param name="money">The monetary value.</param>
+    /// <returns>The multiplied monetary value.</returns>
     public static Money operator *(int factor, Money money) => money.Multiply(factor);
 }

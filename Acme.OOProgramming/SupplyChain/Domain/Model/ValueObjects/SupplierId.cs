@@ -1,10 +1,14 @@
 namespace Acme.OOProgramming.SupplyChain.Domain.Model.ValueObjects;
 
 /// <summary>
-/// Represents a supplier identifier value object in the Supply Chain Management (SCM) bounded context.
+/// Represents a supplier identifier value object in the Supply Chain bounded context.
 /// </summary>
 public readonly record struct SupplierId
 {
+    /// <summary>
+    /// The string identifier value.
+    /// </summary>
+    /// <exception cref="ArgumentException">Thrown when the value is null or white space.</exception>
     public string Identifier
     {
         get => field ?? string.Empty;
@@ -28,5 +32,9 @@ public readonly record struct SupplierId
     /// <exception cref="ArgumentException">Thrown when the identifier is null or empty.</exception>
     public SupplierId(string identifier) => Identifier = identifier;
 
+    /// <summary>
+    /// Returns the string representation of the supplier identifier.
+    /// </summary>
+    /// <returns>The supplier identifier string.</returns>
     public override string ToString() => Identifier;
 }

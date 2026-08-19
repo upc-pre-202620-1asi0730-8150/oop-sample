@@ -5,8 +5,14 @@ using Acme.OOProgramming.SupplyChain.Domain.Model.ValueObjects;
 
 namespace Acme.OOProgramming.Tests.Procurement.Presentation;
 
+/// <summary>
+/// Contains unit tests for Procurement presentation extension members.
+/// </summary>
 public class ConsoleFormattingTests
 {
+    /// <summary>
+    /// Verifies that <see cref="ConsoleFormatting.Summary"/> produces the expected display format for a purchase order.
+    /// </summary>
     [Fact]
     public void Summary_ReturnsFormattedPurchaseOrderSummary()
     {

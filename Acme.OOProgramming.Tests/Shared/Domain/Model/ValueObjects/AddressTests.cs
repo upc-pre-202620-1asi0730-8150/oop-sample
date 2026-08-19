@@ -2,14 +2,23 @@ using Acme.OOProgramming.Shared.Domain.Model.ValueObjects;
 
 namespace Acme.OOProgramming.Tests.Shared.Domain.Model.ValueObjects;
 
+/// <summary>
+/// Contains unit tests for the <see cref="Address"/> value object.
+/// </summary>
 public class AddressTests
 {
+    /// <summary>
+    /// Verifies that calling the parameterless constructor throws an <see cref="InvalidOperationException"/>.
+    /// </summary>
     [Fact]
     public void ParameterlessConstructor_ThrowsInvalidOperationException()
     {
         Assert.Throws<InvalidOperationException>(() => new Address());
     }
 
+    /// <summary>
+    /// Verifies that constructing an <see cref="Address"/> with valid components initializes properties correctly.
+    /// </summary>
     [Fact]
     public void Constructor_WithValidComponents_InitializesSuccessfully()
     {
@@ -23,6 +32,9 @@ public class AddressTests
         Assert.Equal("USA", address.Country);
     }
 
+    /// <summary>
+    /// Verifies that constructing an <see cref="Address"/> with a null state or region initializes successfully and formats correctly.
+    /// </summary>
     [Fact]
     public void Constructor_WithNullStateOrRegion_InitializesSuccessfully()
     {
@@ -32,6 +44,10 @@ public class AddressTests
         Assert.Equal("Main St, 100, Springfield, 62701, USA", address.ToString());
     }
 
+    /// <summary>
+    /// Verifies that constructing an <see cref="Address"/> with null, empty, or whitespace street throws an <see cref="ArgumentException"/>.
+    /// </summary>
+    /// <param name="street">The invalid street value.</param>
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -41,6 +57,9 @@ public class AddressTests
         Assert.ThrowsAny<ArgumentException>(() => new Address(street!, "100", "City", null, "12345", "Country"));
     }
 
+    /// <summary>
+    /// Verifies that constructing an <see cref="Address"/> with a street exceeding 100 characters throws an <see cref="ArgumentException"/>.
+    /// </summary>
     [Fact]
     public void Constructor_WithStreetExceeding100Chars_ThrowsArgumentException()
     {
@@ -48,6 +67,10 @@ public class AddressTests
         Assert.Throws<ArgumentException>(() => new Address(longStreet, "100", "City", null, "12345", "Country"));
     }
 
+    /// <summary>
+    /// Verifies that constructing an <see cref="Address"/> with null, empty, or whitespace number throws an <see cref="ArgumentException"/>.
+    /// </summary>
+    /// <param name="number">The invalid street number value.</param>
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -57,6 +80,10 @@ public class AddressTests
         Assert.ThrowsAny<ArgumentException>(() => new Address("Street", number!, "City", null, "12345", "Country"));
     }
 
+    /// <summary>
+    /// Verifies that constructing an <see cref="Address"/> with null, empty, or whitespace city throws an <see cref="ArgumentException"/>.
+    /// </summary>
+    /// <param name="city">The invalid city value.</param>
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -66,6 +93,10 @@ public class AddressTests
         Assert.ThrowsAny<ArgumentException>(() => new Address("Street", "100", city!, null, "12345", "Country"));
     }
 
+    /// <summary>
+    /// Verifies that constructing an <see cref="Address"/> with null, empty, or whitespace postal code throws an <see cref="ArgumentException"/>.
+    /// </summary>
+    /// <param name="postalCode">The invalid postal code value.</param>
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -75,6 +106,10 @@ public class AddressTests
         Assert.ThrowsAny<ArgumentException>(() => new Address("Street", "100", "City", null, postalCode!, "Country"));
     }
 
+    /// <summary>
+    /// Verifies that constructing an <see cref="Address"/> with null, empty, or whitespace country throws an <see cref="ArgumentException"/>.
+    /// </summary>
+    /// <param name="country">The invalid country value.</param>
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -84,6 +119,9 @@ public class AddressTests
         Assert.ThrowsAny<ArgumentException>(() => new Address("Street", "100", "City", null, "12345", country!));
     }
 
+    /// <summary>
+    /// Verifies that an uninitialized default <see cref="Address"/> struct returns empty strings for string properties.
+    /// </summary>
     [Fact]
     public void DefaultStruct_PropertiesReturnEmptyStrings()
     {
@@ -96,6 +134,9 @@ public class AddressTests
         Assert.Equal(string.Empty, defaultAddress.Country);
     }
 
+    /// <summary>
+    /// Verifies that <see cref="Address.ToString"/> formats the complete address including state/region properly.
+    /// </summary>
     [Fact]
     public void ToString_WithStateOrRegion_FormatsCorrectly()
     {
@@ -104,6 +145,9 @@ public class AddressTests
         Assert.Equal("Main St, 100, Springfield, IL, 62701, USA", address.ToString());
     }
 
+    /// <summary>
+    /// Verifies value equality across <see cref="Address"/> instances.
+    /// </summary>
     [Fact]
     public void Equality_SameValues_AreEqual()
     {
