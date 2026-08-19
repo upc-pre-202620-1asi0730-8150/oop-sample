@@ -18,9 +18,10 @@ purchaseOrder.AddItem(ProductId.New(), 20, 19.99m);
 Console.WriteLine(purchaseOrder.Summary);
 foreach (var item in purchaseOrder.Items)
 {
-    Console.Write($"Order Item: {item.ProductId} x {item.Quantity} at Unit Price of {item.UnitPrice} ");   
+    Console.Write($"Order Item: {item.ProductId} x {item.Quantity} at Unit Price of {item.UnitPrice} ");
     Console.WriteLine($"Results in Order Item Total: {item.CalculateItemTotal()}");
 }
+
 Console.WriteLine($"Order Total: {purchaseOrder.CalculateTotal()}");
 
 try
