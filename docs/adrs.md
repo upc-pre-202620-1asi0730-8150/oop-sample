@@ -9,7 +9,7 @@ This document records the architectural and design decisions made for the ACME O
 
 ## Index of ADRs
 
-* [ADR 001: Bounded Context Architecture (SCM, Procurement, Shared Kernel)](#adr-001-bounded-context-architecture-scm-procurement-shared-kernel)
+* [ADR 001: Bounded Context Architecture (SupplyChain, Procurement, Shared Kernel)](#adr-001-bounded-context-architecture-supplychain-procurement-shared-kernel)
 * [ADR 002: Aggregate Roots and Invariant Encapsulation for Purchase Orders](#adr-002-aggregate-roots-and-invariant-encapsulation-for-purchase-orders)
 * [ADR 003: Immutability and Value Semantics via `readonly record struct`](#adr-003-immutability-and-value-semantics-via-readonly-record-struct)
 * [ADR 004: Time-Ordered UUIDv7 for Product Identifiers](#adr-004-time-ordered-uuidv7-for-product-identifiers)
@@ -19,7 +19,7 @@ This document records the architectural and design decisions made for the ACME O
 
 ---
 
-## ADR 001: Bounded Context Architecture (SCM, Procurement, Shared Kernel)
+## ADR 001: Bounded Context Architecture (SupplyChain, Procurement, Shared Kernel)
 
 ### Status
 Accepted
@@ -29,7 +29,7 @@ The application needs to model supply chain management and purchasing workflows.
 
 ### Decision
 We partition the domain into distinct Bounded Contexts following Domain-Driven Design (DDD):
-1. **Supply Chain Management (`ACME.OOP.SCM`)**: Focuses on suppliers, supplier identities, and vendor profiles.
+1. **Supply Chain Management (`ACME.OOP.SupplyChain`)**: Focuses on suppliers, supplier identities, and vendor profiles.
 2. **Procurement (`ACME.OOP.Procurement`)**: Focuses on purchase orders, line items, and purchasing workflows.
 3. **Shared Kernel (`ACME.OOP.Shared`)**: Contains common value objects shared across contexts (`Money`, `Currency`, `Address`).
 

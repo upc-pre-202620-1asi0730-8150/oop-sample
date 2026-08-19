@@ -1,7 +1,7 @@
 @startuml
 skinparam monochrome true
 
-package "ACME.OOP.SCM" {
+package "ACME.OOP.SupplyChain" {
   class "Supplier" as Supplier <<Aggregate Root>> {
     +Id: SupplierId {readonly}
     +Name: string {readonly}
@@ -87,7 +87,7 @@ end note
 
 note right of SupplierId
   Value Object
-  Identifies Supplier in SCM context
+  Identifies Supplier in SupplyChain context
 end note
 
 note right of Currency
