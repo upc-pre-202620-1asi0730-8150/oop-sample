@@ -10,13 +10,14 @@ namespace ACME.OOP.Procurement.Domain.Model.Aggregates;
 public class PurchaseOrder
 {
     private readonly List<PurchaseOrderItem> _items = [];
+    private IReadOnlyList<PurchaseOrderItem>? _itemsView;
 
     public string OrderNumber { get; }
     public SupplierId SupplierId { get; }
     public DateOnly OrderDate { get; }
     public Currency Currency { get; }
 
-    public IReadOnlyList<PurchaseOrderItem> Items => _items.AsReadOnly();
+    public IReadOnlyList<PurchaseOrderItem> Items => _itemsView ??= _items.AsReadOnly();
 
     /// <summary>
     /// Initializes a new instance of <see cref="PurchaseOrder"/>.
