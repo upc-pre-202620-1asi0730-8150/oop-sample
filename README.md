@@ -1,6 +1,6 @@
 # OOP Sample Project (oop-sample)
 
-OOP-Sample is a C# console application demonstrating **Object-Oriented Programming (OOP)**, **Domain-Driven Design (DDD)** tactical patterns, and **C# 14 / .NET 10** features within the context of Supply Chain Management (SCM) and Procurement domains.
+OOP-Sample is a C# console application demonstrating **Object-Oriented Programming (OOP)**, **Domain-Driven Design (DDD)** tactical patterns, and **C# 14 / .NET 10** features within the context of Supply Chain and Procurement domains.
 
 **Author**: Web Applications Developer Team  
 **License**: See [LICENSE.md](LICENSE.md) for details.
@@ -18,7 +18,7 @@ OOP-Sample is a C# console application demonstrating **Object-Oriented Programmi
 
 The solution is divided into cohesive Bounded Contexts and a Shared Kernel:
 
-### 1. `ACME.OOP.SCM` (Supply Chain Management)
+### 1. `ACME.OOP.SupplyChain` (Supply Chain)
 * **`Supplier`** (*Aggregate Root*): Represents a vendor with identity and location.
 * **`SupplierId`** (*Value Object*): Strongly-typed identifier for supplier references.
 
@@ -28,6 +28,7 @@ The solution is divided into cohesive Bounded Contexts and a Shared Kernel:
 * **`ProductId`** (*Value Object*): Time-ordered sequential identifier generated using UUIDv7 (`Guid.CreateVersion7()`).
 
 ### 3. `ACME.OOP.Shared` (Shared Kernel)
+* **`Currency`** (*Value Object*): Represents ISO 4217 3-letter alphabetic currency codes.
 * **`Money`** (*Value Object*): Immutable monetary value object with currency validation and operator overloads (`+`, `*`).
 * **`Address`** (*Value Object*): Internationalized postal address.
 
@@ -39,7 +40,7 @@ The solution is divided into cohesive Bounded Contexts and a Shared Kernel:
 * **Single-Currency Rule**: `PurchaseOrder` enforces a single currency across all line items and safeguards order calculations.
 * **Currency-Safe Arithmetic**: `Money` prevents cross-currency operations at runtime and supports native operator overloads (`+`, `*`).
 * **Duplicate Line Item Handling**: `PurchaseOrder.AddItem` merges quantities when an existing `ProductId` is added.
-* **Zero-Allocation Value Objects**: Small value objects (`Money`, `Address`, `ProductId`, `SupplierId`) are modeled as `readonly record struct` for stack allocation and structural equality.
+* **Zero-Allocation Value Objects**: Small value objects (`Money`, `Currency`, `Address`, `ProductId`, `SupplierId`) are modeled as `readonly record struct` for stack allocation and structural equality.
 * **Temporal Accuracy**: `PurchaseOrder.OrderDate` uses `DateOnly` to eliminate timezone and time-of-day ambiguity for business orders.
 * **Cross-Context References**: Bounded contexts reference foreign aggregates via strongly-typed IDs (`SupplierId`) rather than direct object references.
 
@@ -66,5 +67,10 @@ dotnet build
 
 ### Run the Application
 ```bash
-dotnet run --project ACME.OOP
+dotnet run --project Acme.OOProgramming
+```
+
+### Run the Test Suite
+```bash
+dotnet test
 ```

@@ -1,12 +1,44 @@
-namespace ACME.OOP.Shared.Domain.Model.ValueObjects;
+namespace Acme.OOProgramming.Shared.Domain.Model.ValueObjects;
 
 /// <summary>
 /// Represents a monetary value object. 
 /// </summary>
 public readonly record struct Money
 {
-    public decimal Amount { get; init; }
-    public string Currency { get; init; }
+    /// <summary>
+    /// The underlying amount.
+    /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the amount is negative.</exception>
+    public decimal Amount
+    {
+        get;
+        init
+        {
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
+            field = value;
+        }
+    }
+
+    /// <summary>
+    /// The currency.
+    /// </summary>
+    /// <exception cref="ArgumentException">Thrown when the currency is not a valid 3-letter ISO code.</exception>
+    public Currency Currency
+    {
+        get;
+        init
+        {
+            if (value == default)
+                throw new ArgumentException("Currency is required.", nameof(Currency));
+            field = value;
+        }
+    }
+
+    /// <summary>
+    /// Prevents parameterless construction of <see cref="Money"/>.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Always thrown because an amount and currency are required.</exception>
+    public Money() => throw new InvalidOperationException("Money must be initialized with an amount and currency.");
 
     /// <summary>
     /// Creates a new instance of <see cref="Money"/>. 
@@ -15,16 +47,20 @@ public readonly record struct Money
     /// <param name="currency">The currency.</param>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when the amount is negative.</exception>
     /// <exception cref="ArgumentException">Thrown when the currency is not a valid 3-letter ISO code.</exception>
-    public Money(decimal amount, string currency)
+    public Money(decimal amount, Currency currency)
     {
-        ArgumentOutOfRangeException.ThrowIfNegative(amount);
-        ArgumentException.ThrowIfNullOrWhiteSpace(currency);
-        if (currency.Length != 3)
-            throw new ArgumentException("Currency must be a valid 3-letter ISO code.", nameof(currency));
-
         Amount = amount;
-        Currency = currency.ToUpperInvariant();
+        Currency = currency;
     }
+
+    /// <summary>
+    /// Creates a new instance of <see cref="Money"/> with the specified amount and currency code.
+    /// </summary>
+    /// <param name="amount">The monetary amount.</param>
+    /// <param name="currencyCode">The currency code.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the amount is negative.</exception>
+    /// <exception cref="ArgumentException">Thrown when the currency code is not a valid 3-letter ISO code.</exception>
+    public Money(decimal amount, string currencyCode) : this(amount, new Currency(currencyCode)) { }
 
     /// <summary>
     /// Returns a string representation of the monetary value. 
@@ -37,11 +73,15 @@ public readonly record struct Money
     /// </summary>
     /// <param name="other">The other <see cref="Money"/> object to add.</param>
     /// <returns>A new <see cref="Money"/> object representing the sum of the two monetary values.</returns>
-    /// <exception cref="InvalidOperationException">Thrown when the currencies do not match.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the currencies do not match or an instance is uninitialized.</exception>
     public Money Add(Money other)
     {
+        if (Currency == default || other.Currency == default)
+            throw new InvalidOperationException("Cannot perform arithmetic on uninitialized Money instances.");
+
         if (Currency != other.Currency)
-            throw new InvalidOperationException($"Cannot add money with different currencies: '{Currency}' and '{other.Currency}'.");
+            throw new InvalidOperationException(
+                $"Cannot add money with different currencies: '{Currency}' and '{other.Currency}'.");
 
         return new Money(Amount + other.Amount, Currency);
     }
@@ -59,8 +99,12 @@ public readonly record struct Money
     /// <param name="factor">The factor to multiply the monetary value by.</param>
     /// <returns>A new <see cref="Money"/> object representing the result of the multiplication.</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when the factor is negative.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the instance is uninitialized.</exception>
     public Money Multiply(decimal factor)
     {
+        if (Currency == default)
+            throw new InvalidOperationException("Cannot perform arithmetic on uninitialized Money instances.");
+
         ArgumentOutOfRangeException.ThrowIfNegative(factor);
         return new Money(Amount * factor, Currency);
     }
