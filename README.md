@@ -67,5 +67,10 @@ dotnet build
 
 ### Run the Application
 ```bash
-dotnet run --project ACME.OOP
+dotnet run --project Acme.OOProgramming
+```
+
+### Run the Test Suite
+```bash
+dotnet test
 ```

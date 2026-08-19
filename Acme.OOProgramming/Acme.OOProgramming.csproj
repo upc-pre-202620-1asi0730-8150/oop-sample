@@ -10,4 +10,7 @@
         <LangVersion>14</LangVersion>
     </PropertyGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="Acme.OOProgramming.Tests" />
+    </ItemGroup>
 </Project>
